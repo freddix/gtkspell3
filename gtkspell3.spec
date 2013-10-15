@@ -1,24 +1,23 @@
-%define		hg_vers	hg143
-
 Summary:	GtkTextView widget for GTK+3
 Name:		gtkspell3
-Version:	3.0.0
-Release:	0.%{hg_vers}.1
-Epoch:		1
+Version:	3.0.4
+Release:	2
 License:	GPL
 Group:		X11/Libraries
-Source0:	http://gtkspell.sourceforge.net/download/gtkspell-%{version}-%{hg_vers}.tar.xz
-# Source0-md5:	67bf503d7812486d20803cdbac888100
+Source0:	http://gtkspell.sourceforge.net/download/%{name}-%{version}.tar.gz
+# Source0-md5:	d25b547507940738cf016936c3452113
 URL:		http://gtkspell.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	docbook-dtd42-xml
 BuildRequires:	enchant-devel
+BuildRequires:	gobject-introspection-devel
 BuildRequires:	gtk+3-devel
 BuildRequires:	gtk-doc
 BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	pkg-config
+BuildRequires:	vala-vapigen
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -44,7 +43,7 @@ Requires:	gtk-doc-common
 gtkspell API documentation.
 
 %prep
-%setup -qn gtkspell-%{version}
+%setup -q
 
 %build
 %{__intltoolize}
@@ -55,7 +54,8 @@ gtkspell API documentation.
 %{__autoheader}
 %{__automake}
 %configure \
-	--disable-static \
+	--disable-silent-rules	\
+	--disable-static	\
 	--with-html-dir=%{_gtkdocdir}
 %{__make}
 
@@ -66,25 +66,31 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT \
 	pkgconfigdir=%{_pkgconfigdir}
 
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/{ak,son}
+
 %find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post   -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post   -p /usr/sbin/ldconfig
+%postun -p /usr/sbin/ldconfig
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog README
 %attr(755,root,root) %ghost %{_libdir}/lib*.so.?
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+%{_libdir}/girepository-1.0/GtkSpell-3.0.typelib
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_includedir}/gtkspell-3.0
 %{_pkgconfigdir}/*.pc
+%{_datadir}/gir-1.0/GtkSpell-3.0.gir
+%{_datadir}/vala/vapi/gtkspell3-3.0.deps
+%{_datadir}/vala/vapi/gtkspell3-3.0.vapi
 
 %files apidocs
 %defattr(644,root,root,755)
