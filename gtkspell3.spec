@@ -1,11 +1,11 @@
 Summary:	GtkTextView widget for GTK+3
 Name:		gtkspell3
-Version:	3.0.4
-Release:	2
+Version:	3.0.6
+Release:	1
 License:	GPL
 Group:		X11/Libraries
 Source0:	http://gtkspell.sourceforge.net/download/%{name}-%{version}.tar.gz
-# Source0-md5:	d25b547507940738cf016936c3452113
+# Source0-md5:	cdc550a06dc424c8c497672bc54649db
 URL:		http://gtkspell.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -67,6 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 	pkgconfigdir=%{_pkgconfigdir}
 
 %{__rm} -r $RPM_BUILD_ROOT%{_localedir}/{ak,son}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %find_lang %{name}
 
